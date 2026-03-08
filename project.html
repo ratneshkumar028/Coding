@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LibraX — Smart Library System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0d0f1a;
+            --surface: rgba(255, 255, 255, 0.04);
+            --surface2: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.10);
+            --accent: #6c63ff;
+            --accent2: #a78bfa;
+            --green: #22c55e;
+            --red: #ef4444;
+            --yellow: #f59e0b;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --radius: 14px;
+            --shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(108, 99, 255, 0.18) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 80%, rgba(167, 139, 250, 0.12) 0%, transparent 60%);
+        }
+
+        
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px);
+            background: rgba(13, 15, 26, 0.85);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            font-weight: 300;
+        }
+
+        .header-meta {
+            font-size: 0.75rem;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-meta .dot {
+            width: 7px;
+            height: 7px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+            }
+        }
+
+        
+        .wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+ 
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.25s, border-color 0.25s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .stat-num {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 28px;
+            backdrop-filter: blur(16px);
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            animation: fadeUp 0.4s ease both;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            font-size: 1rem;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+        }
+ 
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.25s;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .action-btn .icon {
+            font-size: 1.5rem;
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border-color: transparent;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(108, 99, 255, 0.35);
+        }
+
+        .action-btn.active {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border-color: transparent;
+            box-shadow: 0 12px 30px rgba(108, 99, 255, 0.35);
+        }
+ 
+        .sort-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .sort-btn {
+            padding: 7px 16px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--muted);
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .sort-btn:hover,
+        .sort-btn.sorted {
+            background: var(--surface2);
+            color: var(--accent2);
+            border-color: var(--accent);
+        }
+
+      
+        #formPanel {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.4s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        #formPanel.open {
+            max-height: 600px;
+            opacity: 1;
+        }
+
+        .form-inner {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            background: var(--surface2);
+            margin-bottom: 24px;
+        }
+
+        .form-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--accent2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .input-wrap label {
+            display: block;
+            font-size: 0.72rem;
+            color: var(--muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 6px;
+        }
+
+        .input-wrap input {
+            width: 100%;
+            padding: 11px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-wrap input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+        }
+
+        .input-wrap input::placeholder {
+            color: var(--muted);
+            opacity: 0.6;
+        }
+
+        .submit-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 28px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 700;
+            transition: all 0.25s;
+            letter-spacing: 0.3px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+          #searchResult {
+            margin-top: 16px;
+            animation: fadeUp 0.3s ease;
+        }
+        #bookTable {
+            animation: fadeUp 0.4s ease;
+        }
+
+        .table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .table-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .book-count {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .tbl-wrap {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead tr {
+            background: rgba(108, 99, 255, 0.12);
+        }
+
+        th {
+            padding: 13px 16px;
+            text-align: left;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 13px 16px;
+            font-size: 0.875rem;
+            color: var(--text);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            transition: background 0.2s;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr {
+            transition: background 0.2s;
+            animation: rowSlide 0.35s ease both;
+        }
+
+        @keyframes rowSlide {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        tbody tr:hover td {
+            background: rgba(108, 99, 255, 0.07);
+        }
+ 
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .badge.available {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+        }
+
+        .badge.issued {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .badge.available .badge-dot {
+            background: #4ade80;
+        }
+
+        .badge.issued .badge-dot {
+            background: #f87171;
+        }
+ 
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+        }
+
+        .empty-state .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        .empty-state p {
+            font-size: 0.875rem;
+        }
+ 
+        #toastContainer {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(20px);
+            background: rgba(30, 32, 48, 0.95);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            min-width: 280px;
+            max-width: 360px;
+            animation: toastIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(60px) scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        .toast.hide {
+            opacity: 0;
+            transform: translateX(60px) scale(0.9);
+        }
+
+        .toast-icon {
+            font-size: 1.2rem;
+        }
+
+        .toast.success {
+            border-left: 3px solid var(--green);
+        }
+
+        .toast.error {
+            border-left: 3px solid var(--red);
+        }
+
+        .toast.info {
+            border-left: 3px solid var(--accent2);
+        }
+
+        .toast.warning {
+            border-left: 3px solid var(--yellow);
+        }
+
+      
+        .queue-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .queue-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.8rem;
+        }
+
+        .queue-idx {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: grid;
+            place-items: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .queue-empty {
+            color: var(--muted);
+            font-size: 0.8rem;
+            text-align: center;
+            padding: 20px;
+        }
+ 
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 20px 0;
+        }
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: #161827;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 32px;
+            width: min(420px, 90vw);
+            box-shadow: var(--shadow);
+            animation: modalIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.85);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: flex-end;
+        }
+
+        .cancel-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .cancel-btn:hover {
+            background: var(--surface2);
+            color: var(--text);
+        }
+ 
+        .cpp-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.7rem;
+            color: var(--yellow);
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 30px;
+            padding: 3px 10px;
+            font-weight: 700;
+        }
+
+         
+        footer {
+            text-align: center;
+            padding: 32px 16px;
+            color: var(--muted);
+            font-size: 0.75rem;
+        }
+
+        footer a {
+            color: var(--accent2);
+            text-decoration: none;
+        }
+ 
+        @media (max-width: 600px) {
+            header {
+                padding: 14px 16px;
+            }
+
+            .wrapper {
+                padding: 20px 14px;
+            }
+
+            .action-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+     
+    <header>
+        <div class="logo">Libra<span>X</span></div>
+        <div class="header-meta">
+            <span class="dot"></span>
+            C++ DSA — Linked List &amp; Queue Engine
+        </div>
+    </header>
+ 
+    <div id="toastContainer"></div>
+
+   
+    <div class="overlay" id="returnOverlay">
+        <div class="modal">
+            <div class="modal-title">📤 Return a Book</div>
+            <div class="form-grid">
+                <div class="input-wrap">
+                    <label>Registration No.</label>
+                    <input id="retReg" type="text" placeholder="e.g. 2023CS001" />
+                </div>
+                <div class="input-wrap">
+                    <label>Book ID</label>
+                    <input id="retBid" type="text" placeholder="e.g. B001" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn"
+                    onclick="document.getElementById('returnOverlay').classList.remove('show')">Cancel</button>
+                <button class="submit-btn" onclick="confirmReturn()">✔ Confirm Return</button>
+            </div>
+        </div>
+    </div>
+
+  
+    <div class="wrapper">
+
+        <!-- STATS -->
+        <div class="stats-row" id="statsRow">
+            <div class="stat-card">
+                <div class="stat-num" id="statTotal">0</div>
+                <div class="stat-label">Total Books</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" id="statAvail">0</div>
+                <div class="stat-label">Available</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" id="statIssued">0</div>
+                <div class="stat-label">Issued</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" id="statQueue">0</div>
+                <div class="stat-label">In Queue</div>
+            </div>
+        </div>
+ 
+        <div class="action-grid">
+            <button class="action-btn" id="btnAdd" onclick="openPanel('add')"> <span class="icon">➕</span> Add Book
+            </button>
+            <button class="action-btn" id="btnSearch" onclick="openPanel('search')"> <span class="icon">🔍</span> Search
+                / Edit </button>
+            <button class="action-btn" id="btnDelete" onclick="openPanel('delete')"> <span class="icon">🗑️</span>
+                Delete Book </button>
+            <button class="action-btn" id="btnIssue" onclick="openPanel('issue')"> <span class="icon">📤</span> Request
+                Issue </button>
+            <button class="action-btn" id="btnProcess" onclick="processIssue()"> <span class="icon">⚡</span> Process
+                Issue </button>
+            <button class="action-btn" id="btnReturn"
+                onclick="document.getElementById('returnOverlay').classList.add('show')"> <span class="icon">📥</span>
+                Return Book </button>
+            <button class="action-btn" id="btnShow" onclick="showBooksPanel()"> <span class="icon">📚</span> Show All
+                Books </button>
+        </div>
+
+       
+        <div class="sort-row">
+            <span style="color:var(--muted);font-size:0.75rem;font-weight:600;line-height:32px">Sort by:</span>
+            <button class="sort-btn" id="sortId" onclick="sortBooks('id')"> 🆔 ID </button>
+            <button class="sort-btn" id="sortTitle" onclick="sortBooks('title')"> 📖 Title </button>
+            <button class="sort-btn" id="sortAuthor" onclick="sortBooks('author')"> ✍️ Author </button>
+        </div>
+
+       
+        <div id="formPanel">
+            <div class="form-inner" id="formInner"></div>
+        </div>
+ 
+        <div class="card" id="mainCard">
+ 
+            <div id="bookTable">
+                <div class="empty-state">
+                    <div class="empty-icon">📚</div>
+                    <p>No books yet — click <strong>Add Book</strong> to get started!</p>
+                </div>
+            </div>
+
+            <hr class="divider" />
+
+            
+            <div class="card-title">
+                <div class="card-icon">⏳</div>
+                Issue Queue
+                <span class="cpp-badge">⚙️ C++ Queue&lt;T&gt;</span>
+            </div>
+            <div id="queueDisplay">
+                <div class="queue-empty">Queue is empty</div>
+            </div>
+        </div>
+
+    </div>
+ 
+    <footer>
+    LibraX — Built with <strong>C++ DSA concepts</strong> (Linked List · Queue · Stack) — Assignment Project  
+    <br><br>
+     
+</footer>
+
+     
+    <script>
+
+        
+        class Book {
+            constructor(id, title, author) {
+                this.id = id;            
+                this.title = title;
+                this.author = author;
+                this.available = true;         
+                this.next = null;          
+            }
+        }
+
+       
+        class BookLinkedList {
+            constructor() {
+                this.head = null;   
+                this.size = 0;
+            }
+ 
+            addBook(id, title, author) {
+                const newNode = new Book(id, title, author);
+                if (!this.head) {
+                    this.head = newNode;
+                } else {
+                    let temp = this.head;
+                    while (temp.next) temp = temp.next;    
+                    temp.next = newNode;                   
+                }
+                this.size++;
+            }
+
+        
+            findBook(id) {
+                let temp = this.head;
+                while (temp) {
+                    if (temp.id === id) return temp;
+                    temp = temp.next;
+                }
+                return null;
+            }
+
+    
+            deleteBook(id) {
+                if (!this.head) return false;
+                if (this.head.id === id) {
+                    this.head = this.head.next;   
+                    this.size--;
+                    return true;
+                }
+                let prev = this.head;
+                let curr = this.head.next;
+                while (curr) {
+                    if (curr.id === id) {
+                        prev.next = curr.next;    
+                        this.size--;
+                        return true;
+                    }
+                    prev = curr;
+                    curr = curr.next;
+                }
+                return false;
+            }
+
+             
+            getAllBooks() {
+                const arr = [];
+                let temp = this.head;
+                while (temp) { arr.push(temp); temp = temp.next; }
+                return arr;
+            }
+
+          
+            rebuildFromArray(arr) {
+                this.head = null;
+                this.size = 0;
+                arr.forEach(b => this.addBook(b.id, b.title, b.author));
+                // restore availability
+                arr.forEach(b => {
+                    const node = this.findBook(b.id);
+                    if (node) node.available = b.available;
+                });
+            }
+        }
+
+       
+        class IssueQueue {
+            constructor() {
+                this.items = [];    
+            }
+            enqueue(data) { this.items.push(data); }             
+            dequeue() { return this.items.shift(); } 
+            isEmpty() { return this.items.length === 0; }
+            peek() { return this.items[0] || null; }              
+            size() { return this.items.length; }
+        }
+
+        
+        const library = new BookLinkedList();
+        const issueQueue = new IssueQueue();
+        let currentPanel = null;
+        let currentSortBy = null;
+
+        
+        library.addBook('B001', 'Clean Code', 'Robert C. Martin');
+        library.addBook('B002', 'The Pragmatic Programmer', 'David Thomas');
+        library.addBook('B003', 'Introduction to Algorithms', 'CLRS');
+        library.addBook('B004', 'Design Patterns', 'Gang of Four');
+        showBooks();
+        updateStats();
+
+       
+        function toast(message, type = 'info') {
+            const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+            const el = document.createElement('div');
+            el.className = `toast ${type}`;
+            el.innerHTML = `<span class="toast-icon">${icons[type]}</span><span>${message}</span>`;
+            document.getElementById('toastContainer').appendChild(el);
+            setTimeout(() => {
+                el.classList.add('hide');
+                setTimeout(() => el.remove(), 350);
+            }, 3200);
+        }
+
+        
+        function updateStats() {
+            const books = library.getAllBooks();
+            const avail = books.filter(b => b.available).length;
+            document.getElementById('statTotal').textContent = books.length;
+            document.getElementById('statAvail').textContent = avail;
+            document.getElementById('statIssued').textContent = books.length - avail;
+            document.getElementById('statQueue').textContent = issueQueue.size();
+        }
+ 
+        function openPanel(type) {
+            
+            if (currentPanel === type) {
+                closePanel();
+                return;
+            }
+            currentPanel = type;
+            document.querySelectorAll('.action-btn').forEach(b => b.classList.remove('active'));
+            const map = { add: 'btnAdd', search: 'btnSearch', delete: 'btnDelete', issue: 'btnIssue' };
+            if (map[type]) document.getElementById(map[type]).classList.add('active');
+
+            
+            let html = '';
+            if (type === 'add') {
+                html = `
+          <div class="form-title">➕ Add New Book <span class="cpp-badge">⚙️ LinkedList::addBook()</span></div>
+          <div class="form-grid">
+            <div class="input-wrap"><label>Book ID</label><input id="bid" placeholder="e.g. B005" /></div>
+            <div class="input-wrap"><label>Title</label><input id="btitle" placeholder="e.g. Clean Architecture" /></div>
+            <div class="input-wrap"><label>Author</label><input id="bauthor" placeholder="e.g. Robert Martin" /></div>
+          </div>
+          <button class="submit-btn" onclick="addBook()">➕ Add Book</button>`;
+            } else if (type === 'search') {
+                html = `
+          <div class="form-title">🔍 Search & Update Book <span class="cpp-badge">⚙️ LinkedList::findBook()</span></div>
+          <div class="form-grid">
+            <div class="input-wrap"><label>Book ID</label><input id="sid" placeholder="Enter Book ID" /></div>
+          </div>
+          <button class="submit-btn" onclick="searchBook()">🔍 Search</button>
+          <div id="searchResult"></div>`;
+            } else if (type === 'delete') {
+                html = `
+          <div class="form-title">🗑️ Delete Book <span class="cpp-badge">⚙️ LinkedList::deleteBook()</span></div>
+          <div class="form-grid">
+            <div class="input-wrap"><label>Book ID</label><input id="did" placeholder="Enter Book ID to Delete" /></div>
+          </div>
+          <button class="submit-btn" onclick="deleteBook()" style="background:linear-gradient(135deg,#ef4444,#dc2626)">🗑️ Delete</button>`;
+            } else if (type === 'issue') {
+                html = `
+          <div class="form-title">📤 Request Issue <span class="cpp-badge">⚙️ Queue::enqueue()</span></div>
+          <div class="form-grid">
+            <div class="input-wrap"><label>Student Name</label><input id="uname" placeholder="Full Name" /></div>
+            <div class="input-wrap"><label>Registration No.</label><input id="ureg" placeholder="e.g. 2023CS001" /></div>
+            <div class="input-wrap"><label>Book ID</label><input id="ubid" placeholder="e.g. B001" /></div>
+          </div>
+          <button class="submit-btn" onclick="requestIssue()">📤 Add to Queue</button>`;
+            }
+
+            document.getElementById('formInner').innerHTML = html;
+            const panel = document.getElementById('formPanel');
+            panel.classList.remove('open');
+           
+            void panel.offsetWidth;
+            panel.classList.add('open');
+        }
+
+        function closePanel() {
+            currentPanel = null;
+            document.querySelectorAll('.action-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('formPanel').classList.remove('open');
+        }
+ 
+        function addBook() {
+            const id = document.getElementById('bid').value.trim();
+            const title = document.getElementById('btitle').value.trim();
+            const author = document.getElementById('bauthor').value.trim();
+
+            if (!id || !title || !author) {
+                toast('Please fill all fields!', 'warning');
+                return;
+            }
+            if (library.findBook(id)) {
+                toast(`Book ID "${id}" already exists!`, 'error');
+                return;
+            }
+            library.addBook(id, title, author);
+            toast(`📗 "${title}" added successfully!`, 'success');
+            closePanel();
+            showBooks();
+            updateStats();
+        }
+ 
+        function searchBook() {
+            const id = document.getElementById('sid').value.trim();
+            const book = library.findBook(id);
+            const res = document.getElementById('searchResult');
+
+            if (book) {
+                res.innerHTML = `
+          <hr class="divider"/>
+          <div class="form-title" style="color:var(--green)">✅ Book Found — Edit &amp; Update</div>
+          <div class="form-grid">
+            <div class="input-wrap"><label>Title</label><input id="newTitle" value="${book.title}" /></div>
+            <div class="input-wrap"><label>Author</label><input id="newAuthor" value="${book.author}" /></div>
+          </div>
+          <button class="submit-btn" onclick="updateBook('${id}')">💾 Save Changes</button>`;
+            } else {
+                res.innerHTML = `<p style="color:var(--red);margin-top:12px;font-size:0.875rem">❌ No book found with ID "${id}".</p>`;
+            }
+        }
+ 
+        function updateBook(id) {
+            const book = library.findBook(id);
+            if (book) {
+                book.title = document.getElementById('newTitle').value.trim();
+                book.author = document.getElementById('newAuthor').value.trim();
+                toast(`📝 Book "${id}" updated!`, 'success');
+                closePanel();
+                showBooks();
+            }
+        }
+ 
+        function deleteBook() {
+            const id = document.getElementById('did').value.trim();
+            if (!id) { toast('Enter a Book ID to delete.', 'warning'); return; }
+            const ok = library.deleteBook(id);
+            if (ok) {
+                toast(`🗑️ Book "${id}" deleted.`, 'info');
+                closePanel();
+                showBooks();
+                updateStats();
+            } else {
+                toast(`No book found with ID "${id}".`, 'error');
+            }
+        }
+ 
+        function sortBooks(by) {
+            currentSortBy = by;
+            document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('sorted'));
+            document.getElementById('sort' + by.charAt(0).toUpperCase() + by.slice(1)).classList.add('sorted');
+
+            const books = library.getAllBooks();
+            books.sort((a, b) => {
+                if (by === 'id') return a.id.localeCompare(b.id);
+                if (by === 'title') return a.title.localeCompare(b.title);
+                if (by === 'author') return a.author.localeCompare(b.author);
+            });
+            library.rebuildFromArray(books);
+            showBooks();
+            toast(`Sorted by ${by} ✨`, 'info');
+        }
+ 
+        function showBooksPanel() {
+            document.getElementById('mainCard').scrollIntoView({ behavior: 'smooth' });
+            showBooks();
+        }
+
+        function showBooks() {
+            const books = library.getAllBooks();
+            const el = document.getElementById('bookTable');
+
+            if (books.length === 0) {
+                el.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">📚</div>
+            <p>No books in the library yet.</p>
+          </div>`;
+                return;
+            }
+
+            let rows = '';
+            books.forEach((b, i) => {
+                const badge = b.available
+                    ? `<span class="badge available"><span class="badge-dot"></span>Available</span>`
+                    : `<span class="badge issued"><span class="badge-dot"></span>Issued</span>`;
+                rows += `
+          <tr style="animation-delay:${i * 0.04}s">
+            <td><code style="color:var(--accent2);font-size:0.8rem">${b.id}</code></td>
+            <td><strong>${b.title}</strong></td>
+            <td style="color:var(--muted)">${b.author}</td>
+            <td>${badge}</td>
+          </tr>`;
+            });
+
+            el.innerHTML = `
+        <div class="table-header">
+          <div class="table-title card-title" style="margin:0">
+            <div class="card-icon">📚</div>
+            Library Catalogue
+            <span class="cpp-badge">⚙️ LinkedList traversal</span>
+          </div>
+          <span class="book-count">${books.length} Book${books.length !== 1 ? 's' : ''}</span>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Book ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
+        }
+ 
+        function requestIssue() {
+            const name = document.getElementById('uname').value.trim();
+            const regNo = document.getElementById('ureg').value.trim();
+            const id = document.getElementById('ubid').value.trim();
+
+            if (!name || !regNo || !id) { toast('Fill all issue fields!', 'warning'); return; }
+
+            const book = library.findBook(id);
+            if (!book) { toast(`Book "${id}" not found.`, 'error'); return; }
+            if (!book.available) { toast(`Book "${id}" is already issued.`, 'error'); return; }
+
+            issueQueue.enqueue({ name, regNo, id });
+            toast(`📋 ${name}'s request queued for "${book.title}"`, 'success');
+            closePanel();
+            updateStats();
+            renderQueue();
+        }
+ 
+        function processIssue() {
+            if (issueQueue.isEmpty()) {
+                toast('Issue queue is empty.', 'warning');
+                return;
+            }
+            const { name, regNo, id } = issueQueue.dequeue();
+            const book = library.findBook(id);
+            if (book) {
+                book.available = false;
+                toast(`⚡ Issued "${book.title}" to ${name} (${regNo})`, 'success');
+                showBooks();
+                updateStats();
+                renderQueue();
+            } else {
+                toast(`Book "${id}" no longer exists.`, 'error');
+            }
+        }
+ 
+        function confirmReturn() {
+            const reg = document.getElementById('retReg').value.trim();
+            const id = document.getElementById('retBid').value.trim();
+            const book = library.findBook(id);
+
+            if (!book) { toast(`Book "${id}" not found.`, 'error'); return; }
+            if (book.available) { toast(`Book "${id}" was not issued.`, 'warning'); return; }
+
+            book.available = true;
+            document.getElementById('returnOverlay').classList.remove('show');
+            document.getElementById('retReg').value = '';
+            document.getElementById('retBid').value = '';
+            toast(`📥 "${book.title}" returned successfully!`, 'success');
+            showBooks();
+            updateStats();
+        }
+ 
+        function renderQueue() {
+            const el = document.getElementById('queueDisplay');
+            if (issueQueue.isEmpty()) {
+                el.innerHTML = `<div class="queue-empty">Queue is empty (no pending requests)</div>`;
+                return;
+            }
+            let html = '<div class="queue-list">';
+            issueQueue.items.forEach((item, i) => {
+                const book = library.findBook(item.id);
+                html += `
+          <div class="queue-item">
+            <div class="queue-idx">${i + 1}</div>
+            <div>
+              <strong>${item.name}</strong> — ${item.regNo}
+              <span style="color:var(--muted);margin-left:8px;font-size:0.75rem">
+                📖 ${book ? book.title : item.id}
+              </span>
+            </div>
+          </div>`;
+            });
+            html += '</div>';
+            el.innerHTML = html;
+        }
+        renderQueue();
+
+    </script>
+
+</body>
+
+</html>
